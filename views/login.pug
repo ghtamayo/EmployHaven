@@ -1,0 +1,31 @@
+extends ./layouts/layout 
+
+block content 
+    main.container
+        h1(class="text-center text-success" ) LOGIN
+
+        div(class="d-flex justify-content-center")
+            form(class="needs-validation" id="loginForm" action="/user/login" method="POST" novalidate)
+                div(class="mb-3")
+                    label(for="user" class="form-label") User name
+                    input(type="text" class=`form-control ${errors && errors[0].msg ? 'is-invalid' : ''}`  id="user" name="user" aria-describedby="invaliduser", value=user)
+                    div(id="invaliduser" class="invalid-feedback")= (errors && errors[0].msg ? errors[0].msg : '')
+
+                div(class="mb-3")
+                    label(for="password" class="form-label") Password
+                    input(type="text" class=`form-control  ${errors && errors[1].msg ? 'is-invalid' : ''}` id="password" name="password" aria-describedby="invalidpassword", value=password)
+                    div(id="invalidpassword" class="invalid-feedback")= (errors && errors[1].msg ? errors[1].msg : '')
+
+                div(class="mb-3")
+                    span(class="me-3")
+                        a(href="/login") Forgot Password?
+                    span(class="ms-3")
+                        a(href="/register") Forgot Username?
+
+                if errors && errors.length>2 && errors[2].msg
+                    div(class="alert alert-danger alert-dismissible" role="alert")
+                        div= errors[2].msg
+                        button(type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close")
+
+                button(type="submit" class="btn btn-outline-success-light d-block w-100") Login
+                //- a(class="btn btn-outline-success-light d-block" href="login" role="button") Login OLD

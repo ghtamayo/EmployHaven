@@ -1,0 +1,10 @@
+mixin languajes(languajes, selectedValue='en')
+    div(class="mb-3")
+        //- label(class="input-group-text" for="role") Roles
+        label(class="form-label" for="languaje") Languajes
+        select(class="form-select" id="languaje" name="languaje")
+            //- option(selected) User
+            if languajes.length
+                each languaje in languajes
+                    option(value=languaje.initials selected=(languaje.initials===selectedValue
+                    )) #{languaje.languaje}

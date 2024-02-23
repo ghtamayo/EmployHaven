@@ -1,0 +1,153 @@
+include ./roles.pug
+
+mixin userprofile(currentUser)
+
+    h1(class="text-center text-success" ) PROFILE
+    div(class="accordion" id="accordionPanelsStayOpenExample")
+        div(class="accordion-item")
+            h2(class="accordion-header")
+                button(class="accordion-button h5 text-success" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne")
+                    | User data
+            div(id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show")
+                div(class="accordion-body")
+                    //- <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    //- div(class="container text-left")
+                    div(class="row")
+                        div(class="col-lg-10")
+                            div(class="card")
+                                div(class="card-body")
+                                    form(class="needs-validation" action="/user/register" method="POST" enctype="multipart/form-data" novalidate)
+                                        div(class="row")
+                                            div(class="col-lg-3")
+                                                div(class="container text-center")
+                                                    div(class="row")
+                                                        div(class="col align-self-start")
+                                                            img(id='avatarimg' src="/img/avatar_default.png" style="border-radius:50%" width="40%") 
+                                                    div(class="row mt-4")
+                                                        div(class="col align-self-end")
+                                                            label(class="btn btn-outline-success-light" for="avatar") Choose your avatar
+                                                            input(type="file" class="form-control" id="avatar" name="avatar" accept="image/png, image/jpeg")
+
+                                            div(class="col-lg-9")
+                                                div(class="row")
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            label(for="user" class="form-label") User name
+                                                            input(type="text" class=`form-control ${errors && errors[0].msg ? 'is-invalid' : ''}` id="user" name="user" aria-describedby="invaliduser", value=(data ? data.user : ''))
+                                                            div(id="invaliduser" class="invalid-feedback")= (errors && errors[0].msg ? errors[0].msg : '')
+
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            label(for="fullname" class="form-label") Full name
+                                                            input(type="text" class=`form-control ${errors && errors[3].msg ? 'is-invalid' : ''}` id="fullname" name="fullname" aria-describedby="invalidfullname", value=(data ? data.fullname : ''))
+                                                            div(id="invalidfullname" class="invalid-feedback")= (errors && errors[3].msg ? errors[3].msg : '')                               
+
+                                                div(class="row")
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            label(for="email" class="form-label") EMail
+                                                            input(type="email" class=`form-control ${errors && errors[1].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invaliduser" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(data ? data.email : ''))
+                                                            div(id="invalidemail" class="invalid-feedback")= (errors && errors[1].msg ? errors[1].msg : '')
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            label(for="nationality" class="form-label") Nationality
+                                                            input(type="text" class="form-control" id="nationality" name="nationality" maxlength="60")   
+
+                                                div(class="row")
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLanguaje") Launch demo modal
+                                                            table(class="table table-hover")
+                                                                thead
+                                                                    tr
+                                                                    th Language
+                                                                    th Action
+                                                                tbody
+                                                                    tr
+                                                                    td 
+                                                                        input(type="text" class="form-control" id="languaje1" name="languaje1" maxlength="60")
+                                                                    td 
+                                                                        i(class="bi-alarm")
+                                                                    tr
+                                                                    td
+                                                                        input(type="text" class="form-control" id="languaje2" name="languaje2" maxlength="60")
+                                                                    td Delete
+                                                    div(class="col-lg-6")
+                                                        div(class="mb-3")
+                                                            table(class="table table-hover")
+                                                                thead
+                                                                    tr
+                                                                    th Employment
+                                                                    th Expirience
+                                                                    th Action
+                                                                tbody
+                                                                    tr
+                                                                    td Nurse
+                                                                    td 2
+                                                                    td Delete
+                                                                    tr
+                                                                    td Español
+                                                                    td Native
+                                                                    td Delete                                                         
+
+                                                div(class="row")
+                                                    button(type="submit" class="btn btn-outline-success-light d-block w-100") Update
+
+                                            //- div(class="col-lg-3")
+                                            //-     div(class="row")
+                                            //-         div(class="col-lg-8")
+                                            //-             | ADFLJ  KDKFKFKx
+                                            //- div(class="col-lg-4")
+
+                                            //- div(class="col-lg-4")
+                                            //-     button(type="submit" class="btn btn-outline-success-light d-block w-100") Update
+
+                                            //- div(class="col-lg-4")
+
+                        div(class="col-lg-2")
+                            div(class="card")
+                                div(class="card-body")
+                                    form(class="needs-validation" action="/user/register" method="POST" novalidate)
+                                        div(class="row")
+                                            div(class="mb-3")
+                                                label(for="password" class="form-label") Password
+                                                input(type="text" class=`form-control  ${errors && errors[5].msg ? 'is-invalid' : ''}` id="password" name="password" aria-describedby="invalidpassword", value=(data ? data.password : ''))
+                                                div(id="invalidpassword" class="invalid-feedback")= (errors && errors[5].msg ? errors[5].msg : '')
+
+                                        div(class="row")
+                                            div(class="mb-3")
+                                                label(for="repassword" class="form-label") Retype your password
+                                                input(type="text" class=`form-control  ${errors && errors[6].msg ? 'is-invalid' : ''}` id="repassword" name="repassword" aria-describedby="invalidrepassword", value=(data ? data.repassword : ''))
+                                                div(id="invalidrepassword" class="invalid-feedback")= (errors && errors[6].msg ? errors[6].msg : '')
+
+                                        button(type="submit" class="btn btn-outline-success-light d-block w-100") Change password
+
+        div(class="accordion-item")
+            h2(class="accordion-header")
+                button(class="accordion-button h5 text-success" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne")
+                    | Employment data
+            div(id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show")
+                div(class="accordion-body")
+                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+
+    <!-- Modal -->
+    <div class="modal fade" id="addLanguaje" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            | MODAL BODY
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+        </div>
+    </div>
+    </div>
+block scripts 
+    //-     script(src="/js/bootstrap.bundle.min.js")
+    script(type="module" src="/js/avatar.js")

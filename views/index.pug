@@ -1,0 +1,19 @@
+extends ./layouts/layout 
+include ./mixins/employerdb.pug
+include ./mixins/userprofile.pug
+
+
+block content 
+    //- if !currentUser
+    //- span(class="job-world") Jobs World!!!
+    //- main.container
+    if currentUser
+        if currentUser.role=='user'
+            +userprofile(currentUser)
+        if currentUser.role=='employer'
+            span I'm a employer!!!
+            +employerdb(currentUser)
+        if currentUser.role=='admin'
+            span I'm a admin!!!
+
+

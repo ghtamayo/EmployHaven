@@ -1,0 +1,11 @@
+mixin profile(currentUser)
+    ul(class="nav nav-pills ")
+        li(class="nav-item dropdown")
+            a(class="nav-link dropdown-toggle fw-bold text-primary-emphasis" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false")
+                span(class="fs-6")= (currentUser?currentUser.user:'Anonimo')
+                span(class="fs-6")= ` (${(currentUser?currentUser.role:'Unknown')})` 
+
+            ul(class="dropdown-menu")
+                li
+                    a(class="dropdown-item" href="/user/logout") Logout
+

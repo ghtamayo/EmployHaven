@@ -1,0 +1,55 @@
+extends ./layouts/layout
+include ./mixins/roles.pug
+
+block content 
+    main(class="container")
+        h1(class="text-center text-success" ) REGISTER
+        //- div(class="row flex-center min-vh-200 py-6")
+
+        div(class="d-flex justify-content-center")
+            div(class="w12to24em")
+                form(class="needs-validation" action="/user/register" method="POST" enctype="multipart/form-data" novalidate)
+                    div(class="mb-3")
+                        div(class="d-inline pe-3")
+                            img(id='avatarimg' src="/img/avatar_default.png" style="border-radius:50%" width="20%")
+                        div(class="d-inline ps-3")
+                            label(class="btn btn-outline-success-light" for="avatar") Choose your avatar
+                            input(type="file" class="form-control" id="avatar" name="avatar" accept="image/png, image/jpeg")
+
+                    div(class="mb-3")
+                        label(for="user" class="form-label") User name
+                        input(type="text" class=`form-control ${errors && errors[0].msg ? 'is-invalid' : ''}` id="user" name="user" aria-describedby="invaliduser", value=(data ? data.user : ''))
+                        div(id="invaliduser" class="invalid-feedback")= (errors && errors[0].msg ? errors[0].msg : '')
+
+                    div(class="mb-3")
+                        label(for="email" class="form-label") EMail
+                        input(type="email" class=`form-control ${errors && errors[1].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invaliduser" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(data ? data.email : ''))
+                        div(id="invalidemail" class="invalid-feedback")= (errors && errors[1].msg ? errors[1].msg : '')
+
+                    +roles(roles, 'user')
+
+                    div(class="mb-3")
+                        label(for="fullname" class="form-label") Full name
+                        input(type="text" class=`form-control ${errors && errors[3].msg ? 'is-invalid' : ''}` id="fullname" name="fullname" aria-describedby="invalidfullname", value=(data ? data.fullname : ''))
+                        div(id="invalidfullname" class="invalid-feedback")= (errors && errors[3].msg ? errors[3].msg : '')
+
+                    div(class="mb-3")
+                        label(for="nationality" class="form-label") Nationality
+                        input(type="text" class="form-control" id="nationality" name="nationality" maxlength="60")
+
+                    div(class="mb-3")
+                        label(for="password" class="form-label") Password
+                        input(type="text" class=`form-control  ${errors && errors[5].msg ? 'is-invalid' : ''}` id="password" name="password" aria-describedby="invalidpassword", value=(data ? data.password : ''))
+                        div(id="invalidpassword" class="invalid-feedback")= (errors && errors[5].msg ? errors[5].msg : '')
+
+
+                    div(class="mb-3")
+                        label(for="repassword" class="form-label") Retype your password
+                        input(type="text" class=`form-control  ${errors && errors[6].msg ? 'is-invalid' : ''}` id="repassword" name="repassword" aria-describedby="invalidrepassword", value=(data ? data.repassword : ''))
+                        div(id="invalidrepassword" class="invalid-feedback")= (errors && errors[6].msg ? errors[6].msg : '')
+
+                    button(type="submit" class="btn btn-outline-success-light d-block w-100") Register
+
+block scripts 
+    script(src="/js/bootstrap.bundle.min.js")
+    script(type="module" src="/js/avatar.js")

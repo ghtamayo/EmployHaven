@@ -1,0 +1,48 @@
+include ./profile.pug
+
+mixin navbar(currentUser)
+    nav(class="navbar navbar-expand-lg bg-success-subtle")
+        div(class="container-fluid")
+            //- <a class="navbar-brand" href="#">#{title}</a>
+            //- <a class="navbar-brand" href="#">
+            //-     <img src="/img/favicon/favicon-32x32.png" alt="EmployHaven" width="30" height="24">
+            //- </a>
+            button(class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation")
+                span(class="navbar-toggler-icon")
+            a(class="navbar-brand" href=`${currentUser?"/auth":"/"}`)
+                img(src="/img/favicon/favicon-32x32.png" alt="EmployHaven" width="30" height="24")
+            div(class="collapse navbar-collapse" id="navbarSupportedContent")
+                ul(class="navbar-nav me-auto mb-2 mb-lg-0")
+                    li(class="nav-item")
+                        a(class="nav-link active" aria-current="page" href=`${currentUser?"/auth":"/"}`) Home
+                    li(class="nav-item")
+                        a(class="nav-link" href="/user/users") Link
+                    li(class="nav-item dropdown")
+                        a(class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false") Dropdown
+                        ul(class="dropdown-menu")
+                            li: a(class="dropdown-item" href="#") Action
+                            li: a(class="dropdown-item" href="#") Another action
+                            li: hr(class="dropdown-divider")
+                            li: a(class="dropdown-item" href="#") Something else here
+
+                    li(class="nav-item")
+                        a(class="nav-link disabled" aria-disabled="true") Disabled
+
+            if currentUser
+                div(class="gap-2 d-md-flex justify-content-md-end")
+                    +profile(currentUser)
+            else
+                div(class="gap-2 d-md-flex justify-content-md-end")
+                    a(class="btn btn-outline-success-light" href="/user/login" role="button") Login
+                    a(class="btn btn-outline-success-light" href="/user/register" role="button") Register
+
+
+
+//- <div class="d-grid gap-2 col-6 mx-auto">
+//-   <button class="btn btn-primary" type="button">Button</button>
+//-   <button class="btn btn-primary" type="button">Button</button>
+//- </div>
+//- <form class="d-flex" role="search">
+//-     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+//-     button(class="btn btn-outline-success" type="submit") Search
+//- </form>

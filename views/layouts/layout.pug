@@ -1,0 +1,22 @@
+include ../mixins/navbar.pug
+
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport" content="width=device-width, initial-scale=1.0")
+        link(rel="stylesheet" href="/css/bootstrap.min.css")
+        link(rel="stylesheet" href="/css/bootstrap-icons.min.css")
+        link(rel="stylesheet" href="/css/style.css")
+        link(rel="icon" href="img/favicon/favicon-16x16.png")
+        title= title 
+    body
+
+        //- div(class="bg-contenedor") 
+        +navbar(currentUser)
+        block content
+
+        script(src="/js/bootstrap.bundle.min.js")
+        //- script(type="module" src="/js/axios.min.js")
+        script(type="module" src="/js/main.js")
+        block scripts

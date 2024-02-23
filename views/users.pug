@@ -1,0 +1,14 @@
+extends ./layouts/layout 
+
+block content 
+    main.container
+        h1(class="text-center")= title
+        div(class="container text-center")  
+            each user in users
+                div(class="row align-items-start")
+                    div(class="col") User: #{user.user}
+                    div(class="col") Email: #{user.email}
+                    div(class="col") Fullname: #{user.fullname}
+                    div(class="col") Password: #{user.password}
+            else
+                div There are no user
