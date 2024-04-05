@@ -4,7 +4,6 @@ mixin languajes(languajes, selectedValue='en')
         label(class="form-label" for="languaje") Languajes
         select(class="form-select" id="languaje" name="languaje")
             //- option(selected) User
-            if languajes.length
+            if languajes && languajes.length
                 each languaje in languajes
-                    option(value=languaje.initials selected=(languaje.initials===selectedValue
-                    )) #{languaje.languaje}
+                    option(value=languaje.initials selected=(languaje.initials===selectedValue) data-languaje=languaje.languaje) #{languaje.languaje}

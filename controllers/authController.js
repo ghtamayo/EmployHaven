@@ -2,7 +2,7 @@ import fs from 'fs';
 import { Not } from 'typeorm';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { validationResult } from 'express-validator';
+import { body, validationResult } from 'express-validator';
 
 import appDataSource from '../appDataSource.js';
 import __dirname from '../utils.js';
@@ -12,8 +12,11 @@ import Role from '../entity/roleEntity.js';
 import User_Role from '../entity/userRoleEntity.js';
 import { key } from '../settings/keys.js';
 import config from '../settings/config.js';
-import validationFormResult from '../helpers/helpers.js';
-import { startUpper } from '../helpers/helpers.js';
+import validationFormResult, {
+  startUpper,
+  deleteImages,
+} from '../helpers/helpers.js';
+import userRepository from '../repositories/userRepository.js';
 
 const users = async (req, res) => {
   const users = await appDataSource.dataSource.getRepository(User).find();
@@ -34,19 +37,6 @@ const insert = async (user) => {
       });
     }
   );
-};
-
-const deleteImages = (images) => {
-  images.forEach((imagepath) => {
-    fs.unlink(imagepath, async (err, data) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error al leer el archivo de imagen.');
-      } else {
-        console.log('File removed');
-      }
-    });
-  });
 };
 
 const registerRoles = async () => {
@@ -113,11 +103,12 @@ const login = async (req, res) => {
     userFound = {
       user: userFound.user,
       email: userFound.email,
-      fullName: userFound.fullName,
+      fullname: userFound.fullname,
       nationality: userFound.nationality,
       password: userFound.password,
       token: token,
       role: userFound.role,
+      avatar: userFound.avatar,
     };
 
     // res.cookie('currentUser', userFound, config.cookieOptions);
@@ -162,22 +153,15 @@ const register = async (req, res) => {
   // req.body.password = await bcrypt.hash(req.body.password, 10);
 
   if (req.file) {
-    const imagePath = await optimizeImage(req.file.filename);
-    const sourceImagePath = __dirname + '/uploads/' + req.file.filename; // Ruta de la imagen en el servidor
+    const imageName = await optimizeImage(req.file.filename);
+    const sourceImagePath =
+      __dirname + '/public/img/uploads/' + req.file.filename; // Ruta de la imagen en el servidor
 
-    fs.readFile(imagePath, async (err, data) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error al leer el archivo de imagen.');
-      } else {
-        req.body.avatar = `data:image/webp;base64,${data.toString('base64')}`;
+    req.body.avatar = '/img/uploads/' + imageName;
+    await insert(req.body);
 
-        await insert(req.body);
-
-        res.redirect('/user/login');
-        deleteImages([imagePath, sourceImagePath]);
-      }
-    });
+    res.redirect('/user/login');
+    deleteImages([sourceImagePath]);
   } else {
     await insert(req.body);
 
@@ -185,4 +169,34 @@ const register = async (req, res) => {
   }
 };
 
-export default { users, newLogin, login, logout, newRegister, register };
+const registerValidator = [
+  // Validar los campos del formulario utilizando express-validator
+  body('user')
+    .trim()
+    .isLength({ min: 6, max: 20 })
+    .withMessage('User must be at list 6 to 20!'),
+  body('user').custom(async (value) => {
+    let user = await userRepository.user(value);
+    if (user) {
+      throw new Error('User already in use');
+    }
+  }),
+  body('email').isEmail().withMessage('Type an email!'),
+  body('fullname').trim().notEmpty().withMessage('Write full name!'),
+  body('password')
+    .isStrongPassword({ minLength: 8 })
+    .withMessage('Write strong password!'),
+  body('repassword')
+    .isStrongPassword({ minLength: 8 })
+    .withMessage('Write strong password!'),
+];
+
+export default {
+  users,
+  newLogin,
+  login,
+  logout,
+  newRegister,
+  register,
+  registerValidator,
+};

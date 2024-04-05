@@ -1,6 +1,7 @@
-include ./roles.pug
+include ./languajes.pug
+include ./jobtypes.pug
 
-mixin userprofile(currentUser)
+mixin userprofile(currentUser, languajes, userLanguajes, userEmploymentData, passwordData, userDataErrors, passwordErrors)
 
     h1(class="text-center text-success" ) PROFILE
     div(class="accordion" id="accordionPanelsStayOpenExample")
@@ -16,13 +17,14 @@ mixin userprofile(currentUser)
                         div(class="col-lg-10")
                             div(class="card")
                                 div(class="card-body")
-                                    form(class="needs-validation" action="/user/register" method="POST" enctype="multipart/form-data" novalidate)
+                                    form(class="needs-validation" action="/auth/updateuser" method="POST" enctype="multipart/form-data" novalidate)
                                         div(class="row")
                                             div(class="col-lg-3")
                                                 div(class="container text-center")
                                                     div(class="row")
                                                         div(class="col align-self-start")
-                                                            img(id='avatarimg' src="/img/avatar_default.png" style="border-radius:50%" width="40%") 
+                                                            img(id='avatarimg' src=`${currentUser ? (currentUser.avatar ? currentUser.avatar: '/img/avatar_default.png') : '/img/avatar_default.png'}` style="border-radius:50%" width="40%") 
+
                                                     div(class="row mt-4")
                                                         div(class="col align-self-end")
                                                             label(class="btn btn-outline-success-light" for="avatar") Choose your avatar
@@ -33,94 +35,98 @@ mixin userprofile(currentUser)
                                                     div(class="col-lg-6")
                                                         div(class="mb-3")
                                                             label(for="user" class="form-label") User name
-                                                            input(type="text" class=`form-control ${errors && errors[0].msg ? 'is-invalid' : ''}` id="user" name="user" aria-describedby="invaliduser", value=(data ? data.user : ''))
-                                                            div(id="invaliduser" class="invalid-feedback")= (errors && errors[0].msg ? errors[0].msg : '')
+                                                            input(type="text" class=`form-control` id="user" name="user" aria-describedby="invaliduser" readonly, value=(currentUser ? currentUser.user : ''))
 
                                                     div(class="col-lg-6")
                                                         div(class="mb-3")
                                                             label(for="fullname" class="form-label") Full name
-                                                            input(type="text" class=`form-control ${errors && errors[3].msg ? 'is-invalid' : ''}` id="fullname" name="fullname" aria-describedby="invalidfullname", value=(data ? data.fullname : ''))
-                                                            div(id="invalidfullname" class="invalid-feedback")= (errors && errors[3].msg ? errors[3].msg : '')                               
+                                                            input(type="text" class=`form-control ${userDataErrors && userDataErrors[1].msg ? 'is-invalid' : ''}` id="fullname" name="fullname" aria-describedby="invalidfullname", value=(currentUser ? currentUser.fullname : ''))
+                                                            div(id="invalidfullname" class="invalid-feedback")= (userDataErrors && userDataErrors[1].msg ? userDataErrors[1].msg : '')                               
 
                                                 div(class="row")
                                                     div(class="col-lg-6")
                                                         div(class="mb-3")
                                                             label(for="email" class="form-label") EMail
-                                                            input(type="email" class=`form-control ${errors && errors[1].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invaliduser" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(data ? data.email : ''))
-                                                            div(id="invalidemail" class="invalid-feedback")= (errors && errors[1].msg ? errors[1].msg : '')
+                                                            input(type="email" class=`form-control ${userDataErrors && userDataErrors[2].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invaliduser" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(currentUser ? currentUser.email : ''))
+                                                            div(id="invalidemail" class="invalid-feedback")= (userDataErrors && userDataErrors[2].msg ? userDataErrors[2].msg : '')
                                                     div(class="col-lg-6")
                                                         div(class="mb-3")
                                                             label(for="nationality" class="form-label") Nationality
-                                                            input(type="text" class="form-control" id="nationality" name="nationality" maxlength="60")   
-
-                                                div(class="row")
-                                                    div(class="col-lg-6")
-                                                        div(class="mb-3")
-                                                            button(type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addLanguaje") Launch demo modal
-                                                            table(class="table table-hover")
-                                                                thead
-                                                                    tr
-                                                                    th Language
-                                                                    th Action
-                                                                tbody
-                                                                    tr
-                                                                    td 
-                                                                        input(type="text" class="form-control" id="languaje1" name="languaje1" maxlength="60")
-                                                                    td 
-                                                                        i(class="bi-alarm")
-                                                                    tr
-                                                                    td
-                                                                        input(type="text" class="form-control" id="languaje2" name="languaje2" maxlength="60")
-                                                                    td Delete
-                                                    div(class="col-lg-6")
-                                                        div(class="mb-3")
-                                                            table(class="table table-hover")
-                                                                thead
-                                                                    tr
-                                                                    th Employment
-                                                                    th Expirience
-                                                                    th Action
-                                                                tbody
-                                                                    tr
-                                                                    td Nurse
-                                                                    td 2
-                                                                    td Delete
-                                                                    tr
-                                                                    td Español
-                                                                    td Native
-                                                                    td Delete                                                         
+                                                            input(type="text" class="form-control" id="nationality" name="nationality" maxlength="60" value=(currentUser ? currentUser.nationality : ''))   
 
                                                 div(class="row")
                                                     button(type="submit" class="btn btn-outline-success-light d-block w-100") Update
 
-                                            //- div(class="col-lg-3")
-                                            //-     div(class="row")
-                                            //-         div(class="col-lg-8")
-                                            //-             | ADFLJ  KDKFKFKx
-                                            //- div(class="col-lg-4")
-
-                                            //- div(class="col-lg-4")
-                                            //-     button(type="submit" class="btn btn-outline-success-light d-block w-100") Update
-
-                                            //- div(class="col-lg-4")
-
                         div(class="col-lg-2")
                             div(class="card")
                                 div(class="card-body")
-                                    form(class="needs-validation" action="/user/register" method="POST" novalidate)
+                                    form(class="needs-validation" action="/auth/updatepassword" method="POST" novalidate)
                                         div(class="row")
                                             div(class="mb-3")
                                                 label(for="password" class="form-label") Password
-                                                input(type="text" class=`form-control  ${errors && errors[5].msg ? 'is-invalid' : ''}` id="password" name="password" aria-describedby="invalidpassword", value=(data ? data.password : ''))
-                                                div(id="invalidpassword" class="invalid-feedback")= (errors && errors[5].msg ? errors[5].msg : '')
+                                                input(type="text" class=`form-control  ${passwordErrors && passwordErrors[1].msg ? 'is-invalid' : ''}` id="password" name="password" aria-describedby="invalidpassword" value=(passwordData ? passwordData.password : ''))
+                                                div(id="invalidpassword" class="invalid-feedback")= (passwordErrors && passwordErrors[1].msg ? passwordErrors[1].msg : '')
 
                                         div(class="row")
                                             div(class="mb-3")
                                                 label(for="repassword" class="form-label") Retype your password
-                                                input(type="text" class=`form-control  ${errors && errors[6].msg ? 'is-invalid' : ''}` id="repassword" name="repassword" aria-describedby="invalidrepassword", value=(data ? data.repassword : ''))
-                                                div(id="invalidrepassword" class="invalid-feedback")= (errors && errors[6].msg ? errors[6].msg : '')
+                                                input(type="text" class=`form-control  ${passwordErrors && passwordErrors[1].msg ? 'is-invalid' : ''}` id="repassword" name="repassword" aria-describedby="invalidrepassword" value=(passwordData ? passwordData.repassword : ''))
+                                                //- div(id="invalidrepassword" class="invalid-feedback")= (errors && errors[6].msg ? errors[6].msg : '')
 
                                         button(type="submit" class="btn btn-outline-success-light d-block w-100") Change password
+                    div(class="row")
+                        div(class="col-lg-6")
+                            div(class="card mt-3")
+                                div(class="card-body")
+                                    div(class="mb-3")
+                                        button(type="button" class="btn btn-outline-success-light" data-bs-toggle="modal" data-bs-target="#addLanguaje") Add languaje
+                                        table(class="table table-hover" id="languajes")
+                                            thead
+                                                tr
+                                                th Language
+                                                th Action
+                                            tbody
+                                                if userLanguajes
+                                                    each languaje in userLanguajes
+                                                        tr(class="text-center align-middle")
+                                                            td
+                                                                input(type="text", readonly, class=`form-control-plaintext text-capitalize`, id=`${languaje.initials}`, name=`${languaje.initials}`, value=`${languaje.languaje}`)
+                                                            td  
+                                                                a(href=`/auth/deletelanguaje/${languaje.user}.${languaje.initials}` role="button") 
+                                                                    i(class="bi bi-trash3")
+
+                                        if !userLanguajes
+                                            div(id="mesageLanguaje" class="visible")
+                                                p(class="text-danger") Add your languaje!
+
+                        div(class="col-lg-6")
+                            div(class="card mt-3")
+                                div(class="card-body")
+                                    div(class="mb-3")
+                                        button(type="button" class="btn btn-outline-success-light" data-bs-toggle="modal" data-bs-target="#addExperience" id="toggleMyModal") Add experience
+                                        table(class="table table-hover" id="experiences")
+                                            thead
+                                                tr
+                                                th Employment
+                                                th Expirience
+                                                th Action
+                                            tbody
+                                                if userEmployments
+                                                    each employment in userEmployments
+                                                        tr(class="text-center align-middle")
+                                                            td
+                                                                input(type="text", readonly, class=`form-control-plaintext text-capitalize`, id=`${employment.employment}`, name=`${employment.employment}`, value=`${employment.employment}`)
+                                                            td
+                                                                input(type="text", readonly, class=`form-control-plaintext text-capitalize`, id=`${employment.employment + '_' + employment.experience}`, name=`${employment.experience}`, value=`${employment.experience}`)
+                                                            td
+                                                                a(class="d-inline-block edit-eh-employment" href="" role="button" name="editemployment" data-employment=`${employment.employment}` data-experience=`${employment.experience}` data-bs-toggle="modal" data-bs-target="#addExperience")
+                                                                    i(class="bi bi-pencil me-3" )
+                                                                a(class="d-inline-block" href=`/auth/deleteemployment/${employment.employment}.${employment.user}` role="button")
+                                                                    i(class="bi bi-trash3")
+
+                                        if !userEmployments
+                                            div(id="mesageEmployment" class="visible")
+                                                p(class="text-danger") Add your experiences!
 
         div(class="accordion-item")
             h2(class="accordion-header")
@@ -128,26 +134,138 @@ mixin userprofile(currentUser)
                     | Employment data
             div(id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse show")
                 div(class="accordion-body")
-                    <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    //- <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+                    div(class="row")
+                        div(class="col-lg-12")
+                            div(class="card")
+                                div(class="card-body")
+                                    form(class="needs-validation" action="/auth/updateemploymentdata" method="POST" novalidate)
+                                        input(type="number" class=`form-control visually-hidden` id="id" name="id" value=(userEmploymentData ? userEmploymentData.id : '0'))
 
-    <!-- Modal -->
-    <div class="modal fade" id="addLanguaje" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            | MODAL BODY
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-        </div>
-    </div>
-    </div>
+                                        div(class="row")
+                                            div(class="col-lg-3")
+                                                div(class="mb-3")
+                                                    label(for="haveworkpermit" class="form-label me-1") Tiene permiso de trabajo? 
+
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="haveworkpermit" id="haveworkpermit1" value=1 checked=(userEmploymentData ? (userEmploymentData.haveworkpermit ? true : false) : false))
+                                                        label(class="form-check-label" for="haveworkpermit1") Yes
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="haveworkpermit" id="haveworkpermit2" value=0 checked=(userEmploymentData ? (userEmploymentData.haveworkpermit ? false : true) : true))
+                                                        label(class="form-check-label" for="haveworkpermit2") No
+
+                                                    //- label(for="user" class="form-label") User name
+                                                    //- input(type="text" class=`form-control ${errors && errors[0].msg ? 'is-invalid' : ''}` id="user" name="user" aria-describedby="invaliduser", value=(data ? data.user : ''))
+                                                    //- div(id="invaliduser" class="invalid-feedback")= (errors && errors[0].msg ? errors[0].msg : '')
+
+                                                div(class="mb-3")
+                                                    label(for="ein" class="form-label me-1") Tiene número EIN? 
+
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="ein" id="EIN1" value="1" checked=(userEmploymentData ? (userEmploymentData.ein ? true : false): false))
+                                                        label(class="form-check-label" for="EIN1") Yes
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="ein" id="EIN2" value="0" checked=(userEmploymentData ? (userEmploymentData.ein ? false : true):true))
+                                                        label(class="form-check-label" for="EIN2") No
+
+                                                div(class="mb-3")
+                                                    label(for="havepreviousstudies" class="form-label me-1") Tiene estudios previos en USA? 
+
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="havepreviousstudies" id="havepreviousstudies1" value="1" checked=(userEmploymentData ? (userEmploymentData.havepreviousstudies ? true : false) : false))
+                                                        label(class="form-check-label" for="havepreviousstudies1") Yes
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="havepreviousstudies" id="havepreviousstudies2" value="0" checked=(userEmploymentData ? (userEmploymentData.havepreviousstudies ? false : true) : true))
+                                                        label(class="form-check-label" for="havepreviousstudies2") No
+
+                                            div(class="col-lg-5")
+
+                                                div(class="mb-3")
+                                                    label(for="havespecialpermits" class="form-label me-1") Tiene algún permiso especial relacionado con el cargo a que aspira? 
+
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="havespecialpermits" id="havespecialpermits1" value="1" checked=(userEmploymentData ? (userEmploymentData.havespecialpermits ? true : false) : false))
+                                                        label(class="form-check-label" for="havespecialpermits1") Yes
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="havespecialpermits" id="havespecialpermits2" value="0" checked=(userEmploymentData ? (userEmploymentData.havespecialpermits ? false : true) : true))
+                                                        label(class="form-check-label" for="havespecialpermits2") No
+
+                                                div(class="mb-3")
+                                                    label(for="extratime" class="form-label me-1") Te gustaría hacer tiempo extra y ganar por ello? 
+
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="extratime" id="extratime1" value="1" checked=(userEmploymentData ? (userEmploymentData.extratime ? true : false) : false))
+                                                        label(class="form-check-label" for="extratime1") Yes
+                                                    div(class="form-check form-check-inline")
+                                                        input(class="form-check-input" type="radio" name="extratime" id="extratime2" value="0" checked=(userEmploymentData ? (userEmploymentData.extratime ? false : true) : true))
+                                                        label(class="form-check-label" for="extratime2") No
+
+                                                div(class="mb-3")
+                                                    +jobtype(jobTypes, (userEmploymentData ? userEmploymentData.jobtype : 1))
+
+                                            div(class="col-lg-4")
+                                                div(class="mb-3")
+                                                    label(for="perday" class="form-label") Cuanto aspira a ganar por día?
+                                                    input(type="number" class=`form-control` id="perday" name="perday" aria-describedby="invalidperday" value=(userEmploymentData ? userEmploymentData.perday : '0'))
+                                                    div(id="invalidperday" class="invalid-feedback") Specify your salary!
+
+                                                div(class="mb-3")
+                                                    label(for="perhour" class="form-label") Cuanto aspira a ganar por hora?
+                                                    input(type="number" class=`form-control` id="perhour" name="perhour" aria-describedby="invalidperhour" value=(userEmploymentData ? userEmploymentData.perhour : '0'))
+                                                    div(id="invalidperhour" class="invalid-feedback") Specify your salary!
+
+                                                div(class="mb-3")
+                                                    label(for="aspireto" class="form-label") A que aspira?
+                                                    textarea(class="form-control" name="aspireto" id="aspireto" rows="3")= (userEmploymentData ? userEmploymentData.aspireto : '')
+
+                                                button(type="submit" class="btn btn-outline-success-light d-block w-100") Update
+
+
+
+    <!-- Languaje Modal -->
+    div(class="modal fade" id="addLanguaje" tabindex="-1" aria-labelledby="addLanguajeModalLabel" aria-hidden="true")
+        div(class="modal-dialog")
+            div(class="modal-content")
+                form(class="needs-validation" action="/auth/addlanguaje" method="POST" novalidate)
+                    div(class="modal-header")
+                        h1(class="modal-title fs-5" id="addLanguajeModalLabel") Languaje
+                        button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close")
+                    div(class="modal-body")
+                        +languajes(languajes)
+                    div(class="modal-footer")
+                        button(type="button" class="btn btn-outline-secondary-light" data-bs-dismiss="modal") Close
+                        button(type="submit" class="btn btn-outline-success-light" data-bs-dismiss="modal" id="savelanguaje") Save
+
+    <!-- Experience Modal -->
+    //- div(class="modal fade" id="addExperience" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true")
+    form(class="needs-validation" action="/auth/addemployment" method="POST" novalidate id="experienceForm")
+        div(class="modal fade" id="addExperience" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="addExperienceModalLabel" aria-hidden="true")
+            div(class="modal-dialog")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h1(class="modal-title fs-5" id="addExperienceModalLabel") Experience
+                        button(type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="xcloseexperience")
+                    div(class="modal-body")
+                        //- form(class="needs-validation" action="/auth/addemployment" method="POST" novalidate id="experienceForm")
+                        div(class="mb-3")
+                            label(for="employment" class="form-label") Employment
+                            input(type="text" class=`form-control` id="employment" name="employment" aria-describedby="invalidemployment" )
+                            div(id="invalidemployment" class="invalid-feedback") Specify an employment!
+
+                        div(class="mb-3")
+                            label(for="experience" class="form-label") Experience years
+                            input(type="number" class=`form-control` id="experience" name="experience" aria-describedby="invalidexperience")
+                            div(id="invalidexperience" class="invalid-feedback") Specify your experience!
+
+                        input(type="text" class=`form-control visually-hidden` id="employment_old" name="employment_old")
+                        input(type="number" class=`form-control visually-hidden` id="experience_old" name="experience_old")
+                        //- button(type="submit" class="btn btn-outline-success-light" data-bs-dismiss="modal" id="saveexperience") Save
+
+                    div(class="modal-footer")
+                        button(type="button" class="btn btn-outline-secondary-light" data-bs-dismiss="modal" id="closeexperience") Close
+                        button(type="submit" form="experienceForm" class="btn btn-outline-success-light" data-bs-dismiss="modal" id="saveexperience") Save
+
 block scripts 
     //-     script(src="/js/bootstrap.bundle.min.js")
     script(type="module" src="/js/avatar.js")
+    script(type="module" src="/js/userprofile.js")

@@ -12,7 +12,7 @@ const imageFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, __dirname + '/uploads/');
+    cb(null, __dirname + '/public/img/uploads/');
   },
   filename: (req, file, cb) => {
     let fileMeta = path.parse(file.originalname);

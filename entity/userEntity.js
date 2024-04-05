@@ -21,7 +21,8 @@ const User = new EntitySchema({
       length: 255,
     },
     avatar: {
-      type: 'longblob',
+      type: 'varchar',
+      length: 1000,
     },
     nationality: {
       type: 'varchar',

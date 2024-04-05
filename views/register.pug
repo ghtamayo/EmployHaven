@@ -23,7 +23,7 @@ block content
 
                     div(class="mb-3")
                         label(for="email" class="form-label") EMail
-                        input(type="email" class=`form-control ${errors && errors[1].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invaliduser" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(data ? data.email : ''))
+                        input(type="email" class=`form-control ${errors && errors[1].msg ? 'is-invalid' : ''}` id="email" name="email" aria-describedby="invalidemail" pattern="/^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/", value=(data ? data.email : ''))
                         div(id="invalidemail" class="invalid-feedback")= (errors && errors[1].msg ? errors[1].msg : '')
 
                     +roles(roles, 'user')

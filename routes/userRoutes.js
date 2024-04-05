@@ -1,18 +1,35 @@
 import express from 'express';
-import authController from '../controllers/authController.js';
+import authHomeController from '../controllers/authHomeController.js';
+import userController from '../controllers/userController.js';
 import imageController from '../controllers/imageController.js';
 
-const userRouter = express.Router();
+const authenticatedUser = express.Router();
 
-userRouter.get('/login', authController.newLogin);
-userRouter.post('/login', authController.login);
-userRouter.post('/logout', authController.logout);
-userRouter.get('/register', authController.newRegister);
-userRouter.post(
-  '/register',
-  imageController.uploadFile.single('avatar'),
-  authController.register
+authenticatedUser.get('/', authHomeController.home);
+authenticatedUser.get(
+  '/deletelanguaje/:user.:initials',
+  userController.deleteUserLanguaje
 );
-userRouter.get('/users', authController.users);
+authenticatedUser.post('/addlanguaje', userController.addUserLanguaje);
+authenticatedUser.get(
+  '/deleteemployment/:employment.:user',
+  userController.deleteUserEmployment
+);
+authenticatedUser.post('/addemployment', userController.addUserEmployment);
+authenticatedUser.post(
+  '/updateemploymentdata',
+  userController.updateUserEmploymentData
+);
+authenticatedUser.post(
+  '/updateuser',
+  imageController.uploadFile.single('avatar'),
+  userController.updateUserValidator,
+  userController.updateUser
+);
+authenticatedUser.post(
+  '/updatepassword',
+  userController.updatePasswordValidator,
+  userController.updatePassword
+);
 
-export default userRouter;
+export default authenticatedUser;

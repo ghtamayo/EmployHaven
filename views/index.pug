@@ -9,7 +9,7 @@ block content
     //- main.container
     if currentUser
         if currentUser.role=='user'
-            +userprofile(currentUser)
+            +userprofile(currentUser, languajes, userLanguajes, userEmploymentData, passwordData, userDataErrors, passwordErrors)
         if currentUser.role=='employer'
             span I'm a employer!!!
             +employerdb(currentUser)

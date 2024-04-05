@@ -3,8 +3,8 @@ import path from 'path';
 
 import __dirname from '../utils.js';
 
-let folder = __dirname + '/uploads';
-let targetWidth = 460;
+let folder = __dirname + '/public/img/uploads';
+let targetWidth = 320;
 
 const optimizeImage = async (fileName) => {
   try {
@@ -17,12 +17,13 @@ const optimizeImage = async (fileName) => {
 
     await sharp(inputPath)
       .resize(targetWidth)
-      .webp({ quality: 100 })
+      .webp({ quality: 80 })
       .toFile(outputPath);
 
     console.log(`Se ha optimizado la imagen: ${fileName}`);
 
-    return outputPath;
+    // return outputPath;
+    return targetFileName;
   } catch (err) {
     console.error(err);
   }

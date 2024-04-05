@@ -1,0 +1,9 @@
+mixin jobtype(jobtypes, selectedValue='1')
+    div(class="mb-3")
+        //- label(class="input-group-text" for="role") Roles
+        label(class="form-label" for="jobtype") Job type
+        select(class="form-select" id="jobtype" name="jobtype")
+            //- option(selected) User
+            if jobtypes && jobtypes.length
+                each jobtype in jobtypes
+                    option(value=jobtype.id selected=(jobtype.id===selectedValue) data-jobtype=jobtype.type) #{jobtype.type}

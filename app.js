@@ -12,15 +12,12 @@ import appDataSource from './appDataSource.js';
 
 import errorController from './controllers/errorController.js';
 import homeController from './controllers/homeController.js';
-import authHomeController from './controllers/authHomeController.js';
 
-import userRouter from './routes/userRoutes.js';
 import { key } from './settings/keys.js';
 import authRoutes from './routes/authRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 import cookieParser from 'cookie-parser';
 import verifyToken from './middlewares/verifyToken.js';
-
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 appDataSource.dataSource
   .initialize()
@@ -46,22 +43,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-// app.use(function (req, res, next) {
-//   res.set('authorization', '');
-//   next();
-// });
-
 app.get('/', homeController.home);
-app.get('/auth', verifyToken, authHomeController.home);
+app.use('/auth', verifyToken, userRoutes);
 app.use('/user', authRoutes);
-
-app.get('/info', verifyToken, (req, res) => {
-  res.json('INFO OK');
-});
-
-// app.get('/login', userController.login);
-// app.get('/register', userController.register);
-// app.get('/users', userController.users);
 
 app.use(errorController.error404);
 
